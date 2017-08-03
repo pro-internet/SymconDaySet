@@ -23,11 +23,11 @@ class DaySet extends IPSModule
 		}
 
 		// Create DaySet Script
-		if(@IPS_GetObjectIDByIdent("DaySet Script", $this->InstanceID) === false){
+		if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
 		$sid = IPS_CreateScript(0 /* PHP Script */);
 		IPS_SetParent($sid, $this->InstanceID);
 		IPS_SetName($sid, "DaySet");
-		IPS_SetIdent($sid, "DaySet Script");
+		IPS_SetIdent($sid, "DaySetScript");
 		IPS_SetHidden($sid, true);
 		IPS_SetScriptContent($sid, '<?
 
@@ -117,7 +117,7 @@ echo $daysetNamen[$dayset];
 
 ?>');
 } else {
-	$sid = IPS_GetObjectIDByIdent("DaySet Script", $this->InstanceID);
+	$sid = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
 	IPS_SetScriptContent($sid, '<?
 
 	echo IPS_GetName($_IPS["SELF"])." \n";
