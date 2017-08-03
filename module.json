@@ -1,0 +1,14 @@
+{
+    "id": "{b2f6ee3a-175f-4979-9115-728bdt99447b}",
+    "name": "Dayset",
+    "type": 3,
+    "vendor": "prointernet",
+    "aliases":
+    [
+        "Dayset"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "DS"
+}
