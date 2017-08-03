@@ -1,14 +1,14 @@
 {
 	"id": "{D40C120A-C525-4DEC-9A44-ED6E43890C61}",
-	"name": "Umrechnen",
+	"name": "DaySet",
 	"type": 3,
 	"vendor": "",
-	"aliases": 
+	"aliases":
 	[
-		"Umrechnen"
+		"DaySet"
 	],
 	"parentRequirements": [],
 	"childRequirements": [],
 	"implemented": [],
-	"prefix": "UMR"
+	"prefix": "DS"
 }
