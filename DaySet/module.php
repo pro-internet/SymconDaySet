@@ -207,7 +207,7 @@ echo $daysetNamen[$dayset];
 ?>');
 }
 
-$svs = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
+$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
 
 
 
