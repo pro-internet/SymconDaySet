@@ -35,16 +35,19 @@ class DaySet extends IPSModule
 		$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
 		if (!IPS_VariableExists($AbendID)){
 			$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 20, "Dammerung", "", false);
+			$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
 		}
 
 		$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
 		if (!IPS_VariableExists($DaemmerungID)){
 			$vid = $this->CreateVariable(1,"DaySet Dämmerung ab", "DaySetDaemmerungAb", $parent, 1, 450, "Dammerung", "", false);
+			$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
 		}
 
 		$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
 		if (!IPS_VariableExists($FruehID)){
 			$vid = $this->CreateVariable(1,"DaySet Früh ab", "DaySetFruehAb", $parent, 1, 20, "Dammerung", "", false);
+			$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
 		}
 
 
