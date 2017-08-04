@@ -28,8 +28,8 @@ class DaySet extends IPSModule
 		// Create Instance Vars (RGBW & FadeWert)
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
 		$DaySetID = @IPS_GetVariableIDByName("DaySet", $parent);
-		if (!IPS_VariableExists($VarID)){
-			$DaySetID = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
+		if (!IPS_VariableExists($DaySetID)){
+			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
 		}
 
 		$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
