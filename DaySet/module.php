@@ -18,7 +18,7 @@ class DaySet extends IPSModule
 		// Create Instance Profies
 		// CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix = "", $icon = "")
 		if(!IPS_VariableProfileExists("DDaySet")){
-			$this->CreateProfile("DMX.Dim", 1, 0, 6, 0, 0, "", "", "");
+			$this->CreateProfile("DDaySet", 1, 0, 6, 0, 0, "", "", "");
 		}
 
 
