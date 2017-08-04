@@ -15,11 +15,18 @@ class DaySet extends IPSModule
 		// to get our parent
 		$parent = $this->InstanceID;
 
+		// Create Instance Profies
+		// CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix = "", $icon = "")
+		if(!IPS_VariableProfileExists("DDaySet")){
+			$this->CreateProfile("DMX.Dim", 1, 0, 6, 0, 0, "", "", "");
+		}
+
+
 		// Create Instance Vars (RGBW & FadeWert)
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
 		$VarID = @IPS_GetVariableIDByName("DaySet", $parent);
 		if (!IPS_VariableExists($VarID)){
-			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
+			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DDaySet", "", false);
 		}
 
 		// Create DaySet Script
@@ -154,46 +161,46 @@ $luxAbend = GetValue(48283 /*[Zentrale\DaySet\DaySet\DaySet Abend ab]*/);
 
 if($time >= 0 && $time < $morgen) {
 
-// Früh
-if ($lux >= $luxFrueh) {
+	// Früh
+	if ($lux >= $luxFrueh) {
 
-	$dayset = 1;
-	#SMTP_SendMail(31819, "DaySet Früh", "");
+		$dayset = 1;
+		#SMTP_SendMail(31819, "DaySet Früh", "");
 
-}
+	}
 
 } else if ($time >= $morgen && $time < $tag) {
 
-// Morgen
-$dayset = 2;
-#SMTP_SendMail(31819, "DaySet Morgen", "");
+	// Morgen
+	$dayset = 2;
+	#SMTP_SendMail(31819, "DaySet Morgen", "");
 
 } else if ($time >= $tag) {
 
-// Tag
-$dayset = 3;
-#SMTP_SendMail(31819, "DaySet Tag", "");
+	// Tag
+	$dayset = 3;
+	#SMTP_SendMail(31819, "DaySet Tag", "");
 
-// Dämmerung
-if ($lux <= $luxDaemmerung && $hour > 12) {
+	// Dämmerung
+	if ($lux <= $luxDaemmerung && $hour > 12) {
 
-	$dayset = 4;
-	#SMTP_SendMail(31819, "DaySet Dämmerung", "");
+		$dayset = 4;
+		#SMTP_SendMail(31819, "DaySet Dämmerung", "");
 
-	// Abend
-	if ($lux <= $luxAbend) {
+		// Abend
+		if ($lux <= $luxAbend) {
 
-		$dayset = 5;
-		#SMTP_SendMail(31819, "DaySet Abend", "");
+			$dayset = 5;
+			#SMTP_SendMail(31819, "DaySet Abend", "");
+		}
+
 	}
 
-}
-
-// Nacht
-if($time >= $nacht) {
-	$dayset = 6;
-	#SMTP_SendMail(31819, "DaySet Nacht", "");
-}
+	// Nacht
+	if($time >= $nacht) {
+		$dayset = 6;
+		#SMTP_SendMail(31819, "DaySet Nacht", "");
+	}
 
 }
 
@@ -246,6 +253,14 @@ protected function CreateVariable($type, $name, $ident, $parent, $position, $ini
 	}
 
 	return $vid;                                        // Return Variable
+}
+
+protected function CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix, $icon){
+	IPS_CreateVariableProfile($profile, $type);
+	IPS_SetVariableProfileValues($profile, $min, $max, $steps);
+	IPS_SetVariableProfileText($profile, $prefix, $suffix);
+	IPS_SetVariableProfileDigits($profile, $digits);
+	IPS_SetVariableProfileIcon($profile, $icon);
 }
 
 }
