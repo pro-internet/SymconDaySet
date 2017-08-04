@@ -27,9 +27,9 @@ class DaySet extends IPSModule
 
 		// Create Instance Vars (RGBW & FadeWert)
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
-		$VarID = @IPS_GetVariableIDByName("DaySet", $parent);
+		$DaySetID = @IPS_GetVariableIDByName("DaySet", $parent);
 		if (!IPS_VariableExists($VarID)){
-			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
+			$DaySetID = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
 		}
 
 		$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
@@ -154,10 +154,13 @@ echo $daysetNamen[$dayset];
 $svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
 
 
-
+// Trigger on Change
 $vid = $this->CreateEventTrigger($FruehID);
 $vid = $this->CreateEventTrigger($AbendID);
 $vid = $this->CreateEventTrigger($DaemmerungID);
+
+// Trigger on Time
+$vid = $this ->CreateTimeTrigger();
 
 }
 
@@ -208,6 +211,25 @@ protected function CreateEventTrigger($triggerID){
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
 	$eid = IPS_CreateEvent(0);
+	// Set Parent
+	IPS_SetParent($eid, $DaySetID);
+	// Set Name
+	IPS_SetName($eid, "TriggerOnChange".$triggerID);
+	IPS_SetIdent($eid, "TriggerOnChange".$triggerID);
+	// Set Script
+	IPS_SetEventScript($eid, "DS_callScript");
+	// OnUpdate für Variable 12345
+	IPS_SetEventTrigger($eid, 0, $triggerID);
+	IPS_SetEventActive($eid, true);
+
+	return $eid;
+}
+
+protected function CreateTimeTrigger($triggerID){
+	$Instance = $this->InstanceID;
+
+	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
+	$eid = IPS_CreateEvent(1);
 	// Set Parent
 	IPS_SetParent($eid, $Instance);
 	// Set Name
