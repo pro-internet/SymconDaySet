@@ -17,8 +17,11 @@ class DaySet extends IPSModule
 
 		// Create Instance Profies
 		// CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix = "", $icon = "")
-		if(!IPS_VariableProfileExists("DDaySet")){
-			$this->CreateProfile("DDaySet", 1, 0, 6, 0, 0, "", "", "");
+		if(!IPS_VariableProfileExists("DaySet")){
+			$this->CreateProfile("DaySet", 1, 0, 6, 0, 0, "", "", "");
+		}
+		if(!IPS_VariableProfileExists("DDammerung")){
+			$this->CreateProfile("DDammerung", 1, 10, 880, 10, 0, "", "lx", "Moon");
 		}
 
 
@@ -26,8 +29,14 @@ class DaySet extends IPSModule
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
 		$VarID = @IPS_GetVariableIDByName("DaySet", $parent);
 		if (!IPS_VariableExists($VarID)){
-			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DDaySet", "", false);
+			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
 		}
+
+		$VarID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
+		if (!IPS_VariableExists($VarID)){
+			$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 0, "DDammerung", "", false);
+		}
+		
 
 		// Create DaySet Script
 		if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
