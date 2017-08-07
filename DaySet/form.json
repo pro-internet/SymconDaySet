@@ -1,6 +1,6 @@
 {
     "elements":
     [
-        { "type": "ValidationTextBox", "name": "DaemmerungsVar", "caption": "Dämmerungs Variable" },
+        { "type": "SelectVariable", "name": "DaemmerungsVar", "caption": "Dämmerungs Variable" },
     ]
 }
