@@ -1,6 +1,6 @@
 {
     "elements":
     [
-        { "type": "ValidationTextBox", "name": "Dämmerungs Var", "caption": "Daemmerungswert" },
+        { "type": "ValidationTextBox", "name": "DaemmerungsVar", "caption": "Dämmerungs Variable" },
     ]
 }
