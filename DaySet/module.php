@@ -160,7 +160,7 @@ $vid = $this->CreateEventTrigger($AbendID);
 $vid = $this->CreateEventTrigger($DaemmerungID);
 
 // Trigger on Time
-$vid = $this ->CreateTimeTrigger();
+//$vid = $this ->CreateTimeTrigger(); 
 
 }
 
