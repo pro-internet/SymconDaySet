@@ -36,6 +36,8 @@ public function ApplyChanges()
 	parent::ApplyChanges();
 
 	$parent = $this->InstanceID;
+
+	  $DaemmerungsVar = "";
 	  $DaemmerungsVar = json_decode($this->ReadPropertyString("DaemmerungsVar"));
 
 	if ($DaemmerungsVar != ""){
