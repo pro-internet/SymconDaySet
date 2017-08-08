@@ -119,7 +119,7 @@ public function CreateModule($DaemmerungsVar){
 
 	$parent = $this->InstanceID;
 
-	
+	print_r("Bitte Schließen");
 
 	if ($DaemmerungsVar != ""){
 		//Create our trigger
