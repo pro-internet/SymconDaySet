@@ -250,16 +250,14 @@ public function CreateModule($DaemmerungsVar){
 		$vid = $this->CreateEventTrigger($FruehID, "Frueh");
 		$vid = $this->CreateEventTrigger($AbendID, "Abend");
 		$vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
-
-
-	// Trigger on Time
-	// Script, Name, Stunden, Minuten
-	$vid = $this ->CreateTimeTrigger($svs, "tag", 7, 50);
-	$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
-	$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
+		// Trigger on Time
+		// Script, Name, Stunden, Minuten
+		$vid = $this ->CreateTimeTrigger($svs, "tag", 7, 50);
+		$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
+		$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
 	}
 }
 
 }
-
+}
 ?>
