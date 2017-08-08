@@ -119,8 +119,7 @@ public function CreateModule($DaemmerungsVar){
 
 	$parent = $this->InstanceID;
 
-	$DaemmerungsVar = "";
-	$DaemmerungsVar = @json_decode($this->ReadPropertyString("DaemmerungsVar"));
+	
 
 	if ($DaemmerungsVar != ""){
 		//Create our trigger
