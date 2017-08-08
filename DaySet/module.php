@@ -116,6 +116,9 @@ public function callScript(){
 
 
 public function CreateModule($DaemmerungsVar){
+
+	$parent = $this->InstanceID;
+
 	$DaemmerungsVar = "";
 	$DaemmerungsVar = @json_decode($this->ReadPropertyString("DaemmerungsVar"));
 
