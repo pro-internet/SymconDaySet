@@ -160,7 +160,7 @@ $vid = $this->CreateEventTrigger($AbendID);
 $vid = $this->CreateEventTrigger($DaemmerungID);
 
 // Trigger on Time
-//$vid = $this ->CreateTimeTrigger(); 
+$vid = $this ->CreateTimeTrigger();
 
 }
 
@@ -225,7 +225,7 @@ protected function CreateEventTrigger($triggerID){
 	return $eid;
 }
 
-protected function CreateTimeTrigger($triggerID){
+protected function CreateTimeTrigger(){
 	$Instance = $this->InstanceID;
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
@@ -233,12 +233,13 @@ protected function CreateTimeTrigger($triggerID){
 	// Set Parent
 	IPS_SetParent($eid, $Instance);
 	// Set Name
-	IPS_SetName($eid, "TriggerOnChange".$triggerID);
-	IPS_SetIdent($eid, "TriggerOnChange".$triggerID);
+	IPS_SetName($eid, "TriggerOnTime".$triggerID);
+	IPS_SetIdent($eid, "TriggerOnTime".$triggerID);
+
+	IPS_SetScriptTimer($eid, 40);
 	// Set Script
 	IPS_SetEventScript($eid, "DS_callScript");
-	// OnUpdate für Variable 12345
-	IPS_SetEventTrigger($eid, 0, $triggerID);
+
 	IPS_SetEventActive($eid, true);
 
 	return $eid;
