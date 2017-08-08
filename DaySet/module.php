@@ -149,17 +149,7 @@ public function CreateModule($DaemmerungsVar){
 			$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
 		}
 
-
-
-		// Create DaySet Script
-		if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
-		$sid = IPS_CreateScript(0 /* PHP Script */);
-		IPS_SetParent($sid, $this->InstanceID);
-		IPS_SetName($sid, "DaySet");
-		IPS_SetIdent($sid, "DaySetScript");
-		IPS_SetHidden($sid, true);
-		IPS_SetScriptContent($sid, $Script = '<?
-
+		$script = '<?
 	echo IPS_GetName($_IPS["SELF"])." \n";
 
 	$dayset = 6;	// Nacht
@@ -196,16 +186,12 @@ public function CreateModule($DaemmerungsVar){
 
 	// Früh
 	if ($lux >= $luxFrueh) {
-
 		$dayset = 1;
-
 	}
 
 	} else if ($time >= $morgen && $time < $tag) {
-
 	// Morgen
 	$dayset = 2;
-
 	} else if ($time >= $tag) {
 
 	// Tag
@@ -213,12 +199,9 @@ public function CreateModule($DaemmerungsVar){
 
 	// Dämmerung
 	if ($lux <= $luxDaemmerung && $hour > 12) {
-
 		$dayset = 4;
-
 		// Abend
 		if ($lux <= $luxAbend) {
-
 			$dayset = 5;
 		}
 
@@ -232,38 +215,48 @@ public function CreateModule($DaemmerungsVar){
 	}
 
 	SetValue(59623 /*[Zentrale\DaySet\DaySet\DaySet]*/, $dayset);
-
 	#echo $dayset." ";
 	echo $daysetNamen[$dayset];
-	?>');
-	} else {
-	$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
-	IPS_DeleteScript($svs, true);
+	?>';
 
-	$sid = IPS_CreateScript(0 /* PHP Script */);
-	IPS_SetParent($sid, $this->InstanceID);
-	IPS_SetName($sid, "DaySet");
-	IPS_SetIdent($sid, "DaySetScript");
-	IPS_SetHidden($sid, true);
-	IPS_SetScriptContent($sid, $Script);
+
+		// Create DaySet Script
+		if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
+			$sid = IPS_CreateScript(0 /* PHP Script */);
+			IPS_SetParent($sid, $this->InstanceID);
+			IPS_SetName($sid, "DaySet");
+			IPS_SetIdent($sid, "DaySetScript");
+			IPS_SetHidden($sid, true);
+			IPS_SetScriptContent($sid, $script);
+		}
+	else {
+		$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
+		IPS_DeleteScript($svs, true);
+
+		$sid = IPS_CreateScript(0 /* PHP Script */);
+		IPS_SetParent($sid, $this->InstanceID);
+		IPS_SetName($sid, "DaySet");
+		IPS_SetIdent($sid, "DaySetScript");
+		IPS_SetHidden($sid, true);
+		IPS_SetScriptContent($sid, $script);
+		}
+
+		$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
+
+
+		// Trigger on Change
+		$FruehTrigger = @IPS_GetVariableIDByName("Tag", $parent);
+		if (!IPS_VariableExists($DaySetID)){
+			$vid = $this->CreateEventTrigger($FruehID, "Frueh");
+			$vid = $this->CreateEventTrigger($AbendID, "Abend");
+			$vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
+			// Trigger on Time
+			// Script, Name, Stunden, Minuten
+			$vid = $this ->CreateTimeTrigger($svs, "Tag", 7, 50);
+			$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
+			$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
+		}
 	}
-
-	$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
-
-
-	// Trigger on Change
-	$FruehTrigger = @IPS_GetVariableIDByName("Tag", $parent);
-	if (!IPS_VariableExists($DaySetID)){
-		$vid = $this->CreateEventTrigger($FruehID, "Frueh");
-		$vid = $this->CreateEventTrigger($AbendID, "Abend");
-		$vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
-		// Trigger on Time
-		// Script, Name, Stunden, Minuten
-		$vid = $this ->CreateTimeTrigger($svs, "Tag", 7, 50);
-		$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
-		$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
-	}
-}
 
 }
 }
