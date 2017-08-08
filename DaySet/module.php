@@ -155,9 +155,9 @@ $svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
 
 
 // Trigger on Change
-$vid = $this->CreateEventTrigger($FruehID);
-$vid = $this->CreateEventTrigger($AbendID);
-$vid = $this->CreateEventTrigger($DaemmerungID);
+$vid = $this->CreateEventTrigger($FruehID, "Frueh");
+$vid = $this->CreateEventTrigger($AbendID, "Abend");
+$vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
 
 // Trigger on Time
 // Script, Name, Stunden, Minuten
@@ -209,7 +209,7 @@ protected function CreateProfile($profile, $type, $min, $max, $steps, $digits = 
 	IPS_SetVariableProfileIcon($profile, $icon);
 }
 
-protected function CreateEventTrigger($triggerID){
+protected function CreateEventTrigger($triggerID, $name){
 	$Instance = $this->InstanceID;
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
@@ -217,8 +217,8 @@ protected function CreateEventTrigger($triggerID){
 	// Set Parent
 	IPS_SetParent($eid, $Instance);
 	// Set Name
-	IPS_SetName($eid, "TriggerOnChange".$triggerID);
-	IPS_SetIdent($eid, "TriggerOnChange".$triggerID);
+	IPS_SetName($eid, "TriggerOnChange".$name);
+	IPS_SetIdent($eid, "TriggerOnChange".$name);
 	// Set Script
 	IPS_SetEventScript($eid, "DS_callScript");
 	// OnUpdate für Variable 12345
