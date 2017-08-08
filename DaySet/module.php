@@ -35,6 +35,8 @@ public function ApplyChanges()
 	//Never delete this line!
 	parent::ApplyChanges();
 
+	$parent = $this->InstanceID;
+
 	//Create our trigger
   $DaemmerungsVar = json_decode($this->ReadPropertyString("DaemmerungsVar"));
 
