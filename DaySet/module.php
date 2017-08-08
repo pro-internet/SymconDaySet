@@ -77,32 +77,32 @@ public function ApplyChanges()
 	IPS_SetHidden($sid, true);
 	IPS_SetScriptContent($sid, $Script = '<?
 
-	echo IPS_GetName($_IPS["SELF"])." \n";
+echo IPS_GetName($_IPS["SELF"])." \n";
 
-	$dayset = 6;	// Nacht
+$dayset = 6;	// Nacht
 
-	$daysetNamen = array(
-		"1" => "Früh",
-		"2" => "Morgen",
-		"3" => "Tag",
-		"4" => "Dämmerung",
-		"5" => "Abend",
-		"6" => "Nacht"
-	);
+$daysetNamen = array(
+	"1" => "Früh",
+	"2" => "Morgen",
+	"3" => "Tag",
+	"4" => "Dämmerung",
+	"5" => "Abend",
+	"6" => "Nacht"
+);
 
-	$hour = date("H");
-	$minute = date("i");
+$hour = date("H");
+$minute = date("i");
 
-	$time = intval($hour.$minute);
+$time = intval($hour.$minute);
 
-	$nachtTime = IPS_GetEvent(57506 /*[Zentrale\DaySet\DaySet\Nacht]*/)["CyclicTimeFrom"];
-	$nacht = intval(($nachtTime["Hour"] < 10 ? "0" : "").$nachtTime["Hour"].($nachtTime["Minute"] < 10 ? "0" : "").$nachtTime["Minute"]);
+$nachtTime = IPS_GetEvent(57506 /*[Zentrale\DaySet\DaySet\Nacht]*/)["CyclicTimeFrom"];
+$nacht = intval(($nachtTime["Hour"] < 10 ? "0" : "").$nachtTime["Hour"].($nachtTime["Minute"] < 10 ? "0" : "").$nachtTime["Minute"]);
 
-	$morgenTime = IPS_GetEvent(35721 /*[Zentrale\DaySet\DaySet\Morgen]*/)["CyclicTimeFrom"];
-	$morgen = intval(($morgenTime["Hour"] < 10 ? "0" : "").$morgenTime["Hour"].($morgenTime["Minute"] < 10 ? "0" : "").$morgenTime["Minute"]);
+$morgenTime = IPS_GetEvent(35721 /*[Zentrale\DaySet\DaySet\Morgen]*/)["CyclicTimeFrom"];
+$morgen = intval(($morgenTime["Hour"] < 10 ? "0" : "").$morgenTime["Hour"].($morgenTime["Minute"] < 10 ? "0" : "").$morgenTime["Minute"]);
 
-	$tagTime = IPS_GetEvent(23800 /*[Zentrale\DaySet\DaySet\Tag]*/)["CyclicTimeFrom"];
-	$tag = intval(($tagTime["Hour"] < 10 ? "0" : "").$tagTime["Hour"].($tagTime["Minute"] < 10 ? "0" : "").$tagTime["Minute"]);
+$tagTime = IPS_GetEvent(23800 /*[Zentrale\DaySet\DaySet\Tag]*/)["CyclicTimeFrom"];
+$tag = intval(($tagTime["Hour"] < 10 ? "0" : "").$tagTime["Hour"].($tagTime["Minute"] < 10 ? "0" : "").$tagTime["Minute"]);
 
 $lux = GetValue('.$DaemmerungsVar.');
 $luxFrueh = GetValue('.$FruehID.');
@@ -115,7 +115,6 @@ if($time >= 0 && $time < $morgen) {
 if ($lux >= $luxFrueh) {
 
 	$dayset = 1;
-	#SMTP_SendMail(31819, "DaySet Früh", "");
 
 }
 
@@ -123,25 +122,21 @@ if ($lux >= $luxFrueh) {
 
 // Morgen
 $dayset = 2;
-#SMTP_SendMail(31819, "DaySet Morgen", "");
 
 } else if ($time >= $tag) {
 
 // Tag
 $dayset = 3;
-#SMTP_SendMail(31819, "DaySet Tag", "");
 
 // Dämmerung
 if ($lux <= $luxDaemmerung && $hour > 12) {
 
 	$dayset = 4;
-	#SMTP_SendMail(31819, "DaySet Dämmerung", "");
 
 	// Abend
 	if ($lux <= $luxAbend) {
 
 		$dayset = 5;
-		#SMTP_SendMail(31819, "DaySet Abend", "");
 	}
 
 }
@@ -149,7 +144,6 @@ if ($lux <= $luxDaemmerung && $hour > 12) {
 // Nacht
 if($time >= $nacht) {
 	$dayset = 6;
-	#SMTP_SendMail(31819, "DaySet Nacht", "");
 }
 
 }
@@ -158,9 +152,6 @@ SetValue(59623 /*[Zentrale\DaySet\DaySet\DaySet]*/, $dayset);
 
 #echo $dayset." ";
 echo $daysetNamen[$dayset];
-#SMTP_SendMail(31819, "SkyVilla DaySet ".$daysetNamen[$dayset], " ");
-
-
 ?>');
 } else {
 $sid = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
