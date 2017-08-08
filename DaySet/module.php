@@ -160,7 +160,10 @@ $vid = $this->CreateEventTrigger($AbendID);
 $vid = $this->CreateEventTrigger($DaemmerungID);
 
 // Trigger on Time
-$vid = $this ->CreateTimeTrigger($svs);
+// Script, Name, Stunden, Minuten
+$vid = $this ->CreateTimeTrigger($svs, "tag", 7, 50);
+$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
+$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
 
 }
 
@@ -225,18 +228,18 @@ protected function CreateEventTrigger($triggerID){
 	return $eid;
 }
 
-protected function CreateTimeTrigger($svs){
+protected function CreateTimeTrigger($svs, $name, $stunden, $minuten){
 	$Instance = $this->InstanceID;
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
 	$eid = IPS_CreateEvent(1);
 
-	IPS_SetEventCyclicTimeFrom($eid, 7, 50, 0);
+	IPS_SetEventCyclicTimeFrom($eid, $stunden, $minuten, 0);
 	// Set Parent
 	IPS_SetParent($eid, $Instance);
 	// Set Name
-	IPS_SetName($eid, "TriggerOnTime"."Tag");
-	IPS_SetIdent($eid, "TriggerOnTime"."Tag");
+	IPS_SetName($eid, $name);
+	IPS_SetIdent($eid, $name);
 
 	// Set Script
 	IPS_SetEventScript($eid, "DS_callScript");
