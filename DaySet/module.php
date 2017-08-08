@@ -20,8 +20,8 @@ class DaySet extends IPSModule
 		if(!IPS_VariableProfileExists("DaySet")){
 			$this->CreateProfile("DaySet", 1, 0, 6, 0, 0, "", "", "");
 		}
-		if(!IPS_VariableProfileExists("Dammerung")){
-			$this->CreateProfile("Dammerung", 1, 10, 880, 10, 0, "", "lx", "Moon");
+		if(!IPS_VariableProfileExists("Lux")){
+			$this->CreateProfile("Lux", 1, 10, 880, 10, 0, "", " lx", "Sun");
 		}
 
 
@@ -133,19 +133,19 @@ public function CreateModule($DaemmerungsVar){
 
 		$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
 		if (!IPS_VariableExists($AbendID)){
-			$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 20, "Dammerung", "", false);
+			$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 20, "Lux", "", false);
 			$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
 		}
 
 		$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
 		if (!IPS_VariableExists($DaemmerungID)){
-			$vid = $this->CreateVariable(1,"DaySet Dämmerung ab", "DaySetDaemmerungAb", $parent, 1, 450, "Dammerung", "", false);
+			$vid = $this->CreateVariable(1,"DaySet Dämmerung ab", "DaySetDaemmerungAb", $parent, 1, 450, "Lux", "", false);
 			$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
 		}
 
 		$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
 		if (!IPS_VariableExists($FruehID)){
-			$vid = $this->CreateVariable(1,"DaySet Früh ab", "DaySetFruehAb", $parent, 1, 20, "Dammerung", "", false);
+			$vid = $this->CreateVariable(1,"DaySet Früh ab", "DaySetFruehAb", $parent, 1, 20, "Lux", "", false);
 			$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
 		}
 
@@ -237,7 +237,14 @@ public function CreateModule($DaemmerungsVar){
 	echo $daysetNamen[$dayset];
 	?>');
 	} else {
-	$sid = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
+	$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
+	IPS_DeleteScript($svs, true);
+
+	$sid = IPS_CreateScript(0 /* PHP Script */);
+	IPS_SetParent($sid, $this->InstanceID);
+	IPS_SetName($sid, "DaySet");
+	IPS_SetIdent($sid, "DaySetScript");
+	IPS_SetHidden($sid, true);
 	IPS_SetScriptContent($sid, $Script);
 	}
 
