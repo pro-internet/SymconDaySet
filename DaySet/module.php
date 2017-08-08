@@ -230,6 +230,8 @@ protected function CreateTimeTrigger($svs){
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
 	$eid = IPS_CreateEvent(1);
+
+	IPS_SetEventCyclic($eid, 2, 1, 0, 0, 3, 24);
 	// Set Parent
 	IPS_SetParent($eid, $Instance);
 	// Set Name
