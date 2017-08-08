@@ -245,9 +245,12 @@ public function CreateModule($DaemmerungsVar){
 
 
 	// Trigger on Change
-	$vid = $this->CreateEventTrigger($FruehID, "Frueh");
-	$vid = $this->CreateEventTrigger($AbendID, "Abend");
-	$vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
+	$FruehTrigger = @IPS_GetVariableIDByName("tag", $parent);
+	if (!IPS_VariableExists($DaySetID)){
+		$vid = $this->CreateEventTrigger($FruehID, "Frueh");
+		$vid = $this->CreateEventTrigger($AbendID, "Abend");
+		$vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
+
 
 	// Trigger on Time
 	// Script, Name, Stunden, Minuten
