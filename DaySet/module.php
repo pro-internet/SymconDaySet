@@ -231,12 +231,12 @@ protected function CreateTimeTrigger($svs){
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
 	$eid = IPS_CreateEvent(1);
 
-	IPS_SetEventCyclic($eid, 2, 1, 0, 0, 3, 24);
+	IPS_SetEventCyclicTimeFrom($eid, 7, 50, 0);
 	// Set Parent
 	IPS_SetParent($eid, $Instance);
 	// Set Name
-	IPS_SetName($eid, "TriggerOnTime"."Test");
-	IPS_SetIdent($eid, "TriggerOnTime"."Test");
+	IPS_SetName($eid, "TriggerOnTime"."Tag");
+	IPS_SetIdent($eid, "TriggerOnTime"."Tag");
 
 	// Set Script
 	IPS_SetEventScript($eid, "DS_callScript");
