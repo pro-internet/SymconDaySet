@@ -25,116 +25,130 @@ class DaySet extends IPSModule
 		}
 
 
-		// Create Instance Vars (RGBW & FadeWert)
-		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
-		$DaySetID = @IPS_GetVariableIDByName("DaySet", $parent);
-		if (!IPS_VariableExists($DaySetID)){
-			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
-		}
 
+
+}
+
+public function ApplyChanges()
+{
+
+	//Never delete this line!
+	parent::ApplyChanges();
+
+	//Create our trigger
+  $DaemmerungsVar = json_decode($this->ReadPropertyString("DaemmerungsVar"));
+
+
+	// Create Instance Vars (RGBW & FadeWert)
+	// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
+	$DaySetID = @IPS_GetVariableIDByName("DaySet", $parent);
+	if (!IPS_VariableExists($DaySetID)){
+		$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
+	}
+
+	$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
+	if (!IPS_VariableExists($AbendID)){
+		$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 20, "Dammerung", "", false);
 		$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
-		if (!IPS_VariableExists($AbendID)){
-			$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 20, "Dammerung", "", false);
-			$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
-		}
+	}
 
+	$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
+	if (!IPS_VariableExists($DaemmerungID)){
+		$vid = $this->CreateVariable(1,"DaySet Dämmerung ab", "DaySetDaemmerungAb", $parent, 1, 450, "Dammerung", "", false);
 		$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
-		if (!IPS_VariableExists($DaemmerungID)){
-			$vid = $this->CreateVariable(1,"DaySet Dämmerung ab", "DaySetDaemmerungAb", $parent, 1, 450, "Dammerung", "", false);
-			$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
-		}
+	}
 
+	$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
+	if (!IPS_VariableExists($FruehID)){
+		$vid = $this->CreateVariable(1,"DaySet Früh ab", "DaySetFruehAb", $parent, 1, 20, "Dammerung", "", false);
 		$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
-		if (!IPS_VariableExists($FruehID)){
-			$vid = $this->CreateVariable(1,"DaySet Früh ab", "DaySetFruehAb", $parent, 1, 20, "Dammerung", "", false);
-			$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
-		}
+	}
 
 
 
-		// Create DaySet Script
-		if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
-		$sid = IPS_CreateScript(0 /* PHP Script */);
-		IPS_SetParent($sid, $this->InstanceID);
-		IPS_SetName($sid, "DaySet");
-		IPS_SetIdent($sid, "DaySetScript");
-		IPS_SetHidden($sid, true);
-		IPS_SetScriptContent($sid, $Script = '<?
+	// Create DaySet Script
+	if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
+	$sid = IPS_CreateScript(0 /* PHP Script */);
+	IPS_SetParent($sid, $this->InstanceID);
+	IPS_SetName($sid, "DaySet");
+	IPS_SetIdent($sid, "DaySetScript");
+	IPS_SetHidden($sid, true);
+	IPS_SetScriptContent($sid, $Script = '<?
 
-		echo IPS_GetName($_IPS["SELF"])." \n";
+	echo IPS_GetName($_IPS["SELF"])." \n";
 
-		$dayset = 6;	// Nacht
+	$dayset = 6;	// Nacht
 
-		$daysetNamen = array(
-			"1" => "Früh",
-			"2" => "Morgen",
-			"3" => "Tag",
-			"4" => "Dämmerung",
-			"5" => "Abend",
-			"6" => "Nacht"
-		);
+	$daysetNamen = array(
+		"1" => "Früh",
+		"2" => "Morgen",
+		"3" => "Tag",
+		"4" => "Dämmerung",
+		"5" => "Abend",
+		"6" => "Nacht"
+	);
 
-		$hour = date("H");
-		$minute = date("i");
+	$hour = date("H");
+	$minute = date("i");
 
-		$time = intval($hour.$minute);
+	$time = intval($hour.$minute);
 
-		$nachtTime = IPS_GetEvent(57506 /*[Zentrale\DaySet\DaySet\Nacht]*/)["CyclicTimeFrom"];
-		$nacht = intval(($nachtTime["Hour"] < 10 ? "0" : "").$nachtTime["Hour"].($nachtTime["Minute"] < 10 ? "0" : "").$nachtTime["Minute"]);
+	$nachtTime = IPS_GetEvent(57506 /*[Zentrale\DaySet\DaySet\Nacht]*/)["CyclicTimeFrom"];
+	$nacht = intval(($nachtTime["Hour"] < 10 ? "0" : "").$nachtTime["Hour"].($nachtTime["Minute"] < 10 ? "0" : "").$nachtTime["Minute"]);
 
-		$morgenTime = IPS_GetEvent(35721 /*[Zentrale\DaySet\DaySet\Morgen]*/)["CyclicTimeFrom"];
-		$morgen = intval(($morgenTime["Hour"] < 10 ? "0" : "").$morgenTime["Hour"].($morgenTime["Minute"] < 10 ? "0" : "").$morgenTime["Minute"]);
+	$morgenTime = IPS_GetEvent(35721 /*[Zentrale\DaySet\DaySet\Morgen]*/)["CyclicTimeFrom"];
+	$morgen = intval(($morgenTime["Hour"] < 10 ? "0" : "").$morgenTime["Hour"].($morgenTime["Minute"] < 10 ? "0" : "").$morgenTime["Minute"]);
 
-		$tagTime = IPS_GetEvent(23800 /*[Zentrale\DaySet\DaySet\Tag]*/)["CyclicTimeFrom"];
-		$tag = intval(($tagTime["Hour"] < 10 ? "0" : "").$tagTime["Hour"].($tagTime["Minute"] < 10 ? "0" : "").$tagTime["Minute"]);
+	$tagTime = IPS_GetEvent(23800 /*[Zentrale\DaySet\DaySet\Tag]*/)["CyclicTimeFrom"];
+	$tag = intval(($tagTime["Hour"] < 10 ? "0" : "").$tagTime["Hour"].($tagTime["Minute"] < 10 ? "0" : "").$tagTime["Minute"]);
 
-	$lux = GetValue(43183 /*[Zentrale\Wetter\Geräte\Dämmerung\Wert]*/);
-	$luxFrueh = GetValue('.$FruehID.');
-	$luxDaemmerung = GetValue('.$DaemmerungID.');
-	$luxAbend = GetValue('.$AbendID.');
+$lux = GetValue('.$DaemmerungsVar.');
+$luxFrueh = GetValue('.$FruehID.');
+$luxDaemmerung = GetValue('.$DaemmerungID.');
+$luxAbend = GetValue('.$AbendID.');
 
 if($time >= 0 && $time < $morgen) {
 
-	// Früh
-	if ($lux >= $luxFrueh) {
+// Früh
+if ($lux >= $luxFrueh) {
 
-		$dayset = 1;
-		#SMTP_SendMail(31819, "DaySet Früh", "");
+	$dayset = 1;
+	#SMTP_SendMail(31819, "DaySet Früh", "");
 
-	}
+}
 
 } else if ($time >= $morgen && $time < $tag) {
 
-	// Morgen
-	$dayset = 2;
-	#SMTP_SendMail(31819, "DaySet Morgen", "");
+// Morgen
+$dayset = 2;
+#SMTP_SendMail(31819, "DaySet Morgen", "");
 
 } else if ($time >= $tag) {
 
-	// Tag
-	$dayset = 3;
-	#SMTP_SendMail(31819, "DaySet Tag", "");
+// Tag
+$dayset = 3;
+#SMTP_SendMail(31819, "DaySet Tag", "");
 
-	// Dämmerung
-	if ($lux <= $luxDaemmerung && $hour > 12) {
+// Dämmerung
+if ($lux <= $luxDaemmerung && $hour > 12) {
 
-		$dayset = 4;
-		#SMTP_SendMail(31819, "DaySet Dämmerung", "");
+	$dayset = 4;
+	#SMTP_SendMail(31819, "DaySet Dämmerung", "");
 
-		// Abend
-		if ($lux <= $luxAbend) {
+	// Abend
+	if ($lux <= $luxAbend) {
 
-			$dayset = 5;
-			#SMTP_SendMail(31819, "DaySet Abend", "");
-		}
-
+		$dayset = 5;
+		#SMTP_SendMail(31819, "DaySet Abend", "");
 	}
 
-	// Nacht
-	if($time >= $nacht) {
-		$dayset = 6;
-		#SMTP_SendMail(31819, "DaySet Nacht", "");
-	}
+}
+
+// Nacht
+if($time >= $nacht) {
+	$dayset = 6;
+	#SMTP_SendMail(31819, "DaySet Nacht", "");
+}
 
 }
 
@@ -147,8 +161,8 @@ echo $daysetNamen[$dayset];
 
 ?>');
 } else {
-	$sid = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
-	IPS_SetScriptContent($sid, $Script);
+$sid = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
+IPS_SetScriptContent($sid, $Script);
 }
 
 $svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
@@ -164,17 +178,6 @@ $vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
 $vid = $this ->CreateTimeTrigger($svs, "tag", 7, 50);
 $vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
 $vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
-
-}
-
-public function ApplyChanges()
-{
-
-	//Never delete this line!
-	parent::ApplyChanges();
-
-	//Create our trigger
-
 
 }
 
@@ -220,7 +223,7 @@ protected function CreateEventTrigger($triggerID, $name){
 	IPS_SetName($eid, "TriggerOnChange".$name);
 	IPS_SetIdent($eid, "TriggerOnChange".$name);
 	// Set Script
-	IPS_SetEventScript($eid, "DS_callScript");
+	IPS_SetEventScript($eid, "DS_callScript();");
 	// OnUpdate für Variable 12345
 	IPS_SetEventTrigger($eid, 0, $triggerID);
 	IPS_SetEventActive($eid, true);
@@ -242,7 +245,7 @@ protected function CreateTimeTrigger($svs, $name, $stunden, $minuten){
 	IPS_SetIdent($eid, $name);
 
 	// Set Script
-	IPS_SetEventScript($eid, "DS_callScript");
+	IPS_SetEventScript($eid, "DS_callScript();");
 
 	IPS_SetEventActive($eid, true);
 
