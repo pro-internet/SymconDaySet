@@ -37,13 +37,90 @@ public function ApplyChanges()
 
 	$parent = $this->InstanceID;
 
-	  $DaemmerungsVar = "";
-	  $DaemmerungsVar = json_decode($this->ReadPropertyString("DaemmerungsVar"));
+}
+
+
+
+// to Create our Variables
+protected function CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide){
+	$vid = IPS_CreateVariable($type);
+
+	IPS_SetName($vid,$name);                            // set Name
+	IPS_SetParent($vid,$parent);                        // Parent
+	IPS_SetIdent($vid,$ident);                          // ident halt :D
+	IPS_SetPosition($vid,$position);                    // List Position
+	SetValue($vid,$initVal);                            // init value
+	IPS_SetHidden($vid, $hide);                         // Objekt verstecken
+
+	if(!empty($profile)){
+		IPS_SetVariableCustomProfile($vid,$profile);    	// Set custom profile on Variable
+	}
+	if(!empty($action)){
+		IPS_SetVariableCustomAction($vid,$action);      	// Set custom action on Variable
+	}
+
+	return $vid;                                        // Return Variable
+}
+
+protected function CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix, $icon){
+	IPS_CreateVariableProfile($profile, $type);
+	IPS_SetVariableProfileValues($profile, $min, $max, $steps);
+	IPS_SetVariableProfileText($profile, $prefix, $suffix);
+	IPS_SetVariableProfileDigits($profile, $digits);
+	IPS_SetVariableProfileIcon($profile, $icon);
+}
+
+protected function CreateEventTrigger($triggerID, $name){
+	$Instance = $this->InstanceID;
+
+	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
+	$eid = IPS_CreateEvent(0);
+	// Set Parent
+	IPS_SetParent($eid, $Instance);
+	// Set Name
+	IPS_SetName($eid, "TriggerOnChange".$name);
+	IPS_SetIdent($eid, "TriggerOnChange".$name);
+	// Set Script
+	IPS_SetEventScript($eid, "DS_callScript();");
+	// OnUpdate für Variable 12345
+	IPS_SetEventTrigger($eid, 0, $triggerID);
+	IPS_SetEventActive($eid, true);
+
+	return $eid;
+}
+
+protected function CreateTimeTrigger($svs, $name, $stunden, $minuten){
+	$Instance = $this->InstanceID;
+
+	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
+	$eid = IPS_CreateEvent(1);
+
+	IPS_SetEventCyclicTimeFrom($eid, $stunden, $minuten, 0);
+	// Set Parent
+	IPS_SetParent($eid, $Instance);
+	// Set Name
+	IPS_SetName($eid, $name);
+	IPS_SetIdent($eid, $name);
+
+	// Set Script
+	IPS_SetEventScript($eid, "DS_callScript();");
+
+	IPS_SetEventActive($eid, true);
+
+	return $eid;
+}
+
+public function callScript(){
+	IPS_RunScript($svs);
+}
+
+
+public function CreateModule($DaemmerungsVar){
+	$DaemmerungsVar = "";
+	$DaemmerungsVar = @json_decode($this->ReadPropertyString("DaemmerungsVar"));
 
 	if ($DaemmerungsVar != ""){
 		//Create our trigger
-
-
 
 		// Create Instance Vars (RGBW & FadeWert)
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
@@ -176,83 +253,6 @@ public function ApplyChanges()
 	$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
 	$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
 	}
-
-
-}
-
-
-
-// to Create our Variables
-protected function CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide){
-	$vid = IPS_CreateVariable($type);
-
-	IPS_SetName($vid,$name);                            // set Name
-	IPS_SetParent($vid,$parent);                        // Parent
-	IPS_SetIdent($vid,$ident);                          // ident halt :D
-	IPS_SetPosition($vid,$position);                    // List Position
-	SetValue($vid,$initVal);                            // init value
-	IPS_SetHidden($vid, $hide);                         // Objekt verstecken
-
-	if(!empty($profile)){
-		IPS_SetVariableCustomProfile($vid,$profile);    	// Set custom profile on Variable
-	}
-	if(!empty($action)){
-		IPS_SetVariableCustomAction($vid,$action);      	// Set custom action on Variable
-	}
-
-	return $vid;                                        // Return Variable
-}
-
-protected function CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix, $icon){
-	IPS_CreateVariableProfile($profile, $type);
-	IPS_SetVariableProfileValues($profile, $min, $max, $steps);
-	IPS_SetVariableProfileText($profile, $prefix, $suffix);
-	IPS_SetVariableProfileDigits($profile, $digits);
-	IPS_SetVariableProfileIcon($profile, $icon);
-}
-
-protected function CreateEventTrigger($triggerID, $name){
-	$Instance = $this->InstanceID;
-
-	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
-	$eid = IPS_CreateEvent(0);
-	// Set Parent
-	IPS_SetParent($eid, $Instance);
-	// Set Name
-	IPS_SetName($eid, "TriggerOnChange".$name);
-	IPS_SetIdent($eid, "TriggerOnChange".$name);
-	// Set Script
-	IPS_SetEventScript($eid, "DS_callScript();");
-	// OnUpdate für Variable 12345
-	IPS_SetEventTrigger($eid, 0, $triggerID);
-	IPS_SetEventActive($eid, true);
-
-	return $eid;
-}
-
-protected function CreateTimeTrigger($svs, $name, $stunden, $minuten){
-	$Instance = $this->InstanceID;
-
-	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
-	$eid = IPS_CreateEvent(1);
-
-	IPS_SetEventCyclicTimeFrom($eid, $stunden, $minuten, 0);
-	// Set Parent
-	IPS_SetParent($eid, $Instance);
-	// Set Name
-	IPS_SetName($eid, $name);
-	IPS_SetIdent($eid, $name);
-
-	// Set Script
-	IPS_SetEventScript($eid, "DS_callScript();");
-
-	IPS_SetEventActive($eid, true);
-
-	return $eid;
-}
-
-public function callScript(){
-	IPS_RunScript($svs);
 }
 
 }
