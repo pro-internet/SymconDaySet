@@ -233,8 +233,8 @@ protected function CreateTimeTrigger(){
 	// Set Parent
 	IPS_SetParent($eid, $Instance);
 	// Set Name
-	IPS_SetName($eid, "TriggerOnTime".$triggerID);
-	IPS_SetIdent($eid, "TriggerOnTime".$triggerID);
+	IPS_SetName($eid, "TriggerOnTime"."Test");
+	IPS_SetIdent($eid, "TriggerOnTime"."Test");
 
 	IPS_SetScriptTimer($eid, 40);
 	// Set Script
