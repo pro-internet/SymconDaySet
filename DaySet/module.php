@@ -236,7 +236,6 @@ protected function CreateTimeTrigger($svs){
 	IPS_SetName($eid, "TriggerOnTime"."Test");
 	IPS_SetIdent($eid, "TriggerOnTime"."Test");
 
-	IPS_SetScriptTimer($svs, 40);
 	// Set Script
 	IPS_SetEventScript($eid, "DS_callScript");
 
