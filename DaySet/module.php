@@ -109,9 +109,10 @@ public function callScript(){
 }
 
 
-public function CreateModule($id, $DaemmerungsVar){
+public function CreateModule(){
 
 	$parent = $this->InstanceID;
+	$DaemmerungsVar = "Test";
 
 
 	if ($DaemmerungsVar != ""){
