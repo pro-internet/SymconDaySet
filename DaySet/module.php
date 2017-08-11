@@ -113,7 +113,6 @@ public function CreateModule($id, $DaemmerungsVar){
 
 	$parent = $this->InstanceID;
 
-	print_r("Bitte Schließen");
 
 	if ($DaemmerungsVar != ""){
 		//Create our trigger
@@ -251,6 +250,7 @@ public function CreateModule($id, $DaemmerungsVar){
 			$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
 		}
 	}
+	print_r("Bitte Schließen");
 
 }
 }
