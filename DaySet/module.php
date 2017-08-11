@@ -109,7 +109,7 @@ public function callScript(){
 }
 
 
-public function CreateModule($id, $DaemmerungsVar){
+public function CreateModule($DaemmerungsVar){
 
 	$parent = $this->InstanceID;
 
