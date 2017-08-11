@@ -23,10 +23,6 @@ class DaySet extends IPSModule
 		if(!IPS_VariableProfileExists("Lux")){
 			$this->CreateProfile("Lux", 1, 10, 880, 10, 0, "", " lx", "Sun");
 		}
-
-
-
-
 }
 
 public function ApplyChanges()
@@ -38,8 +34,6 @@ public function ApplyChanges()
 	$parent = $this->InstanceID;
 
 }
-
-
 
 // to Create our Variables
 protected function CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide){
