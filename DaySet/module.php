@@ -284,8 +284,8 @@ if($time >= $nacht) {
 }
 
 }
-
-SetValue(59623 /*[Zentrale\DaySet\DaySet\DaySet]*/, $dayset);
+$daySetID = IPS_GetObjectIDByIdent("DaySet", '.$this->InstanceID.');
+SetValue($daySetID, $dayset);
 #echo $dayset." ";
 echo $daysetNamen[$dayset];
 	?>';
