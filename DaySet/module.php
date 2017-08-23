@@ -23,7 +23,7 @@ class DaySet extends IPSModule
 			$this->CreateDaySetProfile("DaySet", 1, 0, 6, 0, 0, "", "", "");
 		}
 		if(!IPS_VariableProfileExists("Lux")){
-			$this->CreateProfile("Lux", 1, 10, 880, 10, 0, "", " lx", "Sun");
+			$this->CreateProfile("Lux", 1, 1, 1000, 1, 0, "", " lx", "Sun");
 		}
 }
 
@@ -182,12 +182,14 @@ public function CreateModule($daemmerungsVar){
 			IPS_SetName($vid, "SetValue");
 			IPS_SetIdent($vid, "SetValueScript");
 			IPS_SetHidden($vid, true);
-			IPS_SetScriptContent($vid, "<?
-				if (\$IPS_SENDER == \"WebFront\")
-				{
-				SetValue(\$_IPS['VARIABLE'], \$_IPS['VALUE']);
-				}
-				?>");
+			IPS_SetScriptContent($vid, "
+<?
+if (\$IPS_SENDER == \"WebFront\")
+{
+    SetValue(\$_IPS['VARIABLE'], \$_IPS['VALUE']);
+}
+?>
+");
 		}
 
 		// Create Instance Vars (RGBW & FadeWert)
@@ -328,8 +330,6 @@ echo $daysetNamen[$dayset];
         }
 
 	}
-	print_r("Bitte Schließen");
-
 }
 }
 ?>
