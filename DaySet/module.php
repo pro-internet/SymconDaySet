@@ -53,6 +53,10 @@ protected function CreateVariable($type, $name, $ident, $parent, $position, $ini
 		IPS_SetVariableCustomAction($vid,$action);      	// Set custom action on Variable
 	}
 
+	// Set Script on Var
+	$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
+	IPS_SetVariableCustomAction($vid,$svid);
+
 	return $vid;                                        // Return Variable
 }
 
@@ -250,6 +254,24 @@ public function CreateModule(){
 			$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
 			$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
 		}
+
+
+		//SetValueScript erstellen
+		if(@IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID) === false)
+		{
+			$vid = IPS_CreateScript(0 /* PHP Script */);
+			IPS_SetParent($vid, $this->InstanceID);
+			IPS_SetName($vid, "SetValue");
+			IPS_SetIdent($vid, "SetValueScript");
+			IPS_SetHidden($vid, true);
+			IPS_SetScriptContent($vid, "<?
+				if (\$IPS_SENDER == \"WebFront\")
+				{
+				SetValue(\$_IPS['VARIABLE'], \$_IPS['VALUE']);
+				}
+				?>");
+		}
+
 	}
 	print_r("Bitte Schließen");
 
