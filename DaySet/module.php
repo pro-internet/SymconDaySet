@@ -143,16 +143,16 @@ public function callScript(){
 }
 
 
-public function CreateModule($id, $dammValue){
+public function CreateModule($id, $daemmerungsVar){
 
 	$parent = $this->InstanceID;
-	$DaemmerungsVar = "Test";
+	$dammValue = "Test";
 
-	if ($dammValue != ""){
-		$DaemmerungsVar = $dammValue;
+	if ($daemmerungsVar != ""){
+		$dammValue = $daemmerungsVar;
 	}
 
-	if ($DaemmerungsVar != ""){
+	if ($dammValue != ""){
 		//Create our trigger
 
 		//SetValueScript erstellen
@@ -224,7 +224,7 @@ public function CreateModule($id, $dammValue){
 	$tagTime = IPS_GetEvent(23800 /*[Zentrale\DaySet\DaySet\Tag]*/)["CyclicTimeFrom"];
 	$tag = intval(($tagTime["Hour"] < 10 ? "0" : "").$tagTime["Hour"].($tagTime["Minute"] < 10 ? "0" : "").$tagTime["Minute"]);
 
-	$lux = GetValue('.$DaemmerungsVar.');
+	$lux = GetValue('.$dammValue.');
 	$luxFrueh = GetValue('.$FruehID.');
 	$luxDaemmerung = GetValue('.$DaemmerungID.');
 	$luxAbend = GetValue('.$AbendID.');
