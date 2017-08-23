@@ -208,28 +208,28 @@ if (\$IPS_SENDER == \"WebFront\")
 
 		// Create Instance Vars (RGBW & FadeWert)
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
-		$DaySetID = @IPS_GetVariableIDByIdent("DaySetVar", $parent);
+		$DaySetID = @IPS_GetVariableIDByName("DaySet", $parent);
 		if (!IPS_VariableExists($DaySetID)){
-			$vid = $this->CreateVariable(1,"DaySet", "DaySetVar", $parent, 1, 0, "DaySet", "", false);
-			$DaySetID = @IPS_GetVariableIDByIdent("DaySet", $parent);
+			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
+			$DaySetID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
 		}
 
-		$AbendID = @IPS_GetVariableIDByIdent("DaySetAbendAb", $parent);
+		$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
 		if (!IPS_VariableExists($AbendID)){
 			$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 20, "Lux", "", false);
-			$AbendID = @IPS_GetVariableIDByIdent("DaySetAbendAb", $parent);
+			$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
 		}
 
-		$DaemmerungID = @IPS_GetVariableIDByIdent("DaySetDaemmerungAb", $parent);
+		$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
 		if (!IPS_VariableExists($DaemmerungID)){
 			$vid = $this->CreateVariable(1,"DaySet Dämmerung ab", "DaySetDaemmerungAb", $parent, 1, 450, "Lux", "", false);
-			$DaemmerungID = @IPS_GetVariableIDByIdent("DaySetDaemmerungAb", $parent);
+			$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
 		}
 
-		$FruehID = @IPS_GetVariableIDByIdent("DaySetFruehAb", $parent);
+		$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
 		if (!IPS_VariableExists($FruehID)){
 			$vid = $this->CreateVariable(1,"DaySet Früh ab", "DaySetFruehAb", $parent, 1, 20, "Lux", "", false);
-			$FruehID = @IPS_GetVariableIDByIdent("DaySetFruehAb", $parent);
+			$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
 		}
 
 		$script = '<?
