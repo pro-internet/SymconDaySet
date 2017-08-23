@@ -121,16 +121,16 @@ protected function CreateEventTrigger($svs, $triggerID, $name){
 	$InstanceID = $this->InstanceID;
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
-	$eid = IPS_CreateEvent(0);
+		$eid = IPS_CreateEvent(0);
 	// Set Parent
 	IPS_SetParent($eid, $InstanceID);
 	// Set Name
 	IPS_SetName($eid, "TriggerOnChange".$name);
 	IPS_SetIdent($eid, "TriggerOnChange".$name);
 	// Set Script
-    IPS_SetEventScript($eid, "IPS_RunScript(".$svs.");");
+  IPS_SetEventScript($eid, "IPS_RunScript(".$svs.");");
 	// OnUpdate für Variable 12345
-	IPS_SetEventTrigger($eid, 0, $triggerID);
+	IPS_SetEventTrigger($eid, 1, $triggerID);
 	IPS_SetEventActive($eid, true);
 
 	return $eid;
