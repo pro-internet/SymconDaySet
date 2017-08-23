@@ -117,18 +117,18 @@ protected function CreateDaySetProfile($profile, $type, $min, $max, $steps, $dig
 	IPS_SetVariableProfileAssociation($profile, 6, "Dämmerung", "", -1);
 }
 
-protected function CreateEventTrigger($triggerID, $name){
-	$Instance = $this->InstanceID;
+protected function CreateEventTrigger($svs, $triggerID, $name){
+	$InstanceID = $this->InstanceID;
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
 	$eid = IPS_CreateEvent(0);
 	// Set Parent
-	IPS_SetParent($eid, $Instance);
+	IPS_SetParent($eid, $InstanceID);
 	// Set Name
 	IPS_SetName($eid, "TriggerOnChange".$name);
 	IPS_SetIdent($eid, "TriggerOnChange".$name);
 	// Set Script
-	IPS_SetEventScript($eid, "DS_callScript();");
+    IPS_SetEventScript($eid, "IPS_RunScript(".$svs.");");
 	// OnUpdate für Variable 12345
 	IPS_SetEventTrigger($eid, 0, $triggerID);
 	IPS_SetEventActive($eid, true);
@@ -137,29 +137,29 @@ protected function CreateEventTrigger($triggerID, $name){
 }
 
 protected function CreateTimeTrigger($svs, $name, $stunden, $minuten){
-	$Instance = $this->InstanceID;
+    $InstanceID = $this->InstanceID;
 
 	// 0 = ausgelöstes; 1 = zyklisches; 2 = Wochenplan;
 	$eid = IPS_CreateEvent(1);
 
 	IPS_SetEventCyclicTimeFrom($eid, $stunden, $minuten, 0);
 	// Set Parent
-	IPS_SetParent($eid, $Instance);
+	IPS_SetParent($eid, $InstanceID);
 	// Set Name
 	IPS_SetName($eid, $name);
 	IPS_SetIdent($eid, $name);
 
 	// Set Script
-	IPS_SetEventScript($eid, "DS_callScript();");
+	IPS_SetEventScript($eid, "IPS_RunScript(".$svs.");");
 
 	IPS_SetEventActive($eid, true);
 
 	return $eid;
 }
 
-public function callScript(){
-	IPS_RunScript($svs);
-}
+//public function callScript(){
+//	IPS_RunScript($svs);
+//}
 
 
 public function CreateModule($daemmerungsVar){
@@ -182,8 +182,8 @@ public function CreateModule($daemmerungsVar){
 			IPS_SetName($vid, "SetValue");
 			IPS_SetIdent($vid, "SetValueScript");
 			IPS_SetHidden($vid, true);
-			IPS_SetScriptContent($vid, "
-<?
+			IPS_SetScriptContent($vid,
+"<?
 if (\$IPS_SENDER == \"WebFront\")
 {
     SetValue(\$_IPS['VARIABLE'], \$_IPS['VALUE']);
@@ -292,15 +292,15 @@ echo $daysetNamen[$dayset];
 
 
 
-		// Create DaySet Script
-		if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
-			$sid = IPS_CreateScript(0 /* PHP Script */);
-			IPS_SetParent($sid, $this->InstanceID);
-			IPS_SetName($sid, "DaySet");
-			IPS_SetIdent($sid, "DaySetScript");
-			IPS_SetHidden($sid, true);
-			IPS_SetScriptContent($sid, $script);
-		}
+    // Create DaySet Script
+    if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
+        $sid = IPS_CreateScript(0 /* PHP Script */);
+        IPS_SetParent($sid, $this->InstanceID);
+        IPS_SetName($sid, "DaySet");
+        IPS_SetIdent($sid, "DaySetScript");
+        IPS_SetHidden($sid, true);
+        IPS_SetScriptContent($sid, $script);
+    }
 	else {
 		$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
 		IPS_DeleteScript($svs, true);
@@ -319,9 +319,9 @@ echo $daysetNamen[$dayset];
         // Trigger on Change
         $FruehTrigger = @IPS_GetVariableIDByName("Tag", $parent);
         if (!IPS_VariableExists($DaySetID)){
-            $vid = $this->CreateEventTrigger($FruehID, "Frueh");
-            $vid = $this->CreateEventTrigger($AbendID, "Abend");
-            $vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
+            $vid = $this->CreateEventTrigger($svs, $FruehID, "Frueh");
+            $vid = $this->CreateEventTrigger($svs, $AbendID, "Abend");
+            $vid = $this->CreateEventTrigger($svs, $DaemmerungID, "Daemmerung");
             // Trigger on Time
             // Script, Name, Stunden, Minuten
             $vid = $this ->CreateTimeTrigger($svs, "Tag", 7, 50);
