@@ -208,28 +208,28 @@ if (\$IPS_SENDER == \"WebFront\")
 
 		// Create Instance Vars (RGBW & FadeWert)
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
-		$DaySetID = @IPS_GetVariableIDByName("DaySet", $parent);
+		$DaySetID = @IPS_GetObjectIDByIdent("DaySet", $parent);
 		if (!IPS_VariableExists($DaySetID)){
 			$vid = $this->CreateVariable(1,"DaySet", "DaySet", $parent, 1, 0, "DaySet", "", false);
-			$DaySetID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
+			$DaySetID = @IPS_GetObjectIDByIdent("DaySet", $parent);
 		}
 
-		$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
+		$AbendID = @IPS_GetObjectIDByIdent("DaySetAbendAb", $parent);
 		if (!IPS_VariableExists($AbendID)){
 			$vid = $this->CreateVariable(1,"DaySet Abend ab", "DaySetAbendAb", $parent, 1, 20, "Lux", "", false);
-			$AbendID = @IPS_GetVariableIDByName("DaySet Abend ab", $parent);
+			$AbendID = @IPS_GetObjectIDByIdent("DaySetAbendAb", $parent);
 		}
 
-		$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
+		$DaemmerungID = @IPS_GetObjectIDByIdent("DaySetDaemmerungAb", $parent);
 		if (!IPS_VariableExists($DaemmerungID)){
 			$vid = $this->CreateVariable(1,"DaySet Dämmerung ab", "DaySetDaemmerungAb", $parent, 1, 450, "Lux", "", false);
-			$DaemmerungID = @IPS_GetVariableIDByName("DaySet Dämmerung ab", $parent);
+			$DaemmerungID = @IPS_GetObjectIDByIdent("DaySetDaemmerungAb", $parent);
 		}
 
-		$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
+		$FruehID = @IPS_GetObjectIDByIdent("DaySetFruehAb", $parent);
 		if (!IPS_VariableExists($FruehID)){
 			$vid = $this->CreateVariable(1,"DaySet Früh ab", "DaySetFruehAb", $parent, 1, 20, "Lux", "", false);
-			$FruehID = @IPS_GetVariableIDByName("DaySet Früh ab", $parent);
+			$FruehID = @IPS_GetObjectIDByIdent("DaySetFruehAb", $parent);
 		}
 
 		$script = '<?
@@ -333,7 +333,7 @@ echo $daysetNamen[$dayset];
 
         // Trigger on Change
         $FruehTrigger = @IPS_GetVariableIDByName("Tag", $parent);
-        if (!IPS_VariableExists($DaySetID)){
+        if (IPS_VariableExists($DaySetID)){
             $vid = $this->CreateEventTrigger($svs, $FruehID, "Frueh");
             $vid = $this->CreateEventTrigger($svs, $AbendID, "Abend");
             $vid = $this->CreateEventTrigger($svs, $DaemmerungID, "Daemmerung");
