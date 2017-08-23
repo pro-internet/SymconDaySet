@@ -1,6 +1,6 @@
 {
 	"elements":
 	[
-		{ "type": "SelectVariable", "name": "daemmerungsVar", "caption": "Input Sensor" }
+		{ "type": "SelectVariable", "name": "daemmerungsVar", "caption": "Dämmerungs Sensor" }
 	]
 }
