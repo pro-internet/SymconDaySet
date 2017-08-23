@@ -128,11 +128,14 @@ public function callScript(){
 }
 
 
-public function CreateModule(){
+public function CreateModule($id, $dammValue){
 
 	$parent = $this->InstanceID;
 	$DaemmerungsVar = "Test";
 
+	if ($dammValue != ""){
+		$DaemmerungsVar = $dammValue;
+	}
 
 	if ($DaemmerungsVar != ""){
 		//Create our trigger
