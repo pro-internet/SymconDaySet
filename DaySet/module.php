@@ -49,11 +49,11 @@ protected function CreateVariable($type, $name, $ident, $parent, $position, $ini
 	if(!empty($profile)){
 		IPS_SetVariableCustomProfile($vid,$profile);    	// Set custom profile on Variable
 	}
-	if(!empty($action)){
+	// if(!empty($action)){
 		// Set Script on Var
 		$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
 		IPS_SetVariableCustomAction($vid,$svid);
-	}
+	// }
 
 
 
@@ -121,6 +121,22 @@ public function CreateModule(){
 
 	if ($DaemmerungsVar != ""){
 		//Create our trigger
+
+		//SetValueScript erstellen
+		if(@IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID) === false)
+		{
+			$vid = IPS_CreateScript(0 /* PHP Script */);
+			IPS_SetParent($vid, $this->InstanceID);
+			IPS_SetName($vid, "SetValue");
+			IPS_SetIdent($vid, "SetValueScript");
+			IPS_SetHidden($vid, true);
+			IPS_SetScriptContent($vid, "<?
+				if (\$IPS_SENDER == \"WebFront\")
+				{
+				SetValue(\$_IPS['VARIABLE'], \$_IPS['VALUE']);
+				}
+				?>");
+		}
 
 		// Create Instance Vars (RGBW & FadeWert)
 		// CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide)
@@ -256,21 +272,7 @@ public function CreateModule(){
 		}
 
 
-		//SetValueScript erstellen
-		if(@IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID) === false)
-		{
-			$vid = IPS_CreateScript(0 /* PHP Script */);
-			IPS_SetParent($vid, $this->InstanceID);
-			IPS_SetName($vid, "SetValue");
-			IPS_SetIdent($vid, "SetValueScript");
-			IPS_SetHidden($vid, true);
-			IPS_SetScriptContent($vid, "<?
-				if (\$IPS_SENDER == \"WebFront\")
-				{
-				SetValue(\$_IPS['VARIABLE'], \$_IPS['VALUE']);
-				}
-				?>");
-		}
+
 
 	}
 	print_r("Bitte Schließen");
