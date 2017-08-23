@@ -2,6 +2,6 @@
 	"actions":
 	[
     { "type": "SelectVariable", "name": "DaemmerungsVar", "caption": "Dämmerungs Variable" },
-		{ "type": "Button", "label": "Submit", "onClick": "DS_CreateModule($this->CreateVariable, $id, $DaemmerungsVar);" }
+		{ "type": "Button", "label": "Submit", "onClick": "DS_CreateModule($DaemmerungsVar);" }
 	]
 }
