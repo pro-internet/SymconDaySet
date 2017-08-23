@@ -50,12 +50,12 @@ protected function CreateVariable($type, $name, $ident, $parent, $position, $ini
 		IPS_SetVariableCustomProfile($vid,$profile);    	// Set custom profile on Variable
 	}
 	if(!empty($action)){
-		IPS_SetVariableCustomAction($vid,$action);      	// Set custom action on Variable
+		// Set Script on Var
+		$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
+		IPS_SetVariableCustomAction($vid,$svid);
 	}
 
-	// Set Script on Var
-	$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
-	IPS_SetVariableCustomAction($vid,$svid);
+
 
 	return $vid;                                        // Return Variable
 }
