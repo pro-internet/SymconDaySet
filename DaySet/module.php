@@ -18,7 +18,7 @@ class DaySet extends IPSModule
 		// Create Instance Profies
 		// CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix = "", $icon = "")
 		if(!IPS_VariableProfileExists("DaySet")){
-			$this->CreateProfile("DaySet", 1, 0, 6, 0, 0, "", "", "");
+			$this->CreateDaySetProfile("DaySet", 1, 0, 6, 0, 0, "", "", "");
 		}
 		if(!IPS_VariableProfileExists("Lux")){
 			$this->CreateProfile("Lux", 1, 10, 880, 10, 0, "", " lx", "Sun");
@@ -66,6 +66,21 @@ protected function CreateProfile($profile, $type, $min, $max, $steps, $digits = 
 	IPS_SetVariableProfileText($profile, $prefix, $suffix);
 	IPS_SetVariableProfileDigits($profile, $digits);
 	IPS_SetVariableProfileIcon($profile, $icon);
+}
+
+protected function CreateDaySetProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix, $icon){
+	IPS_CreateVariableProfile($profile, $type);
+	IPS_SetVariableProfileValues($profile, $min, $max, $steps);
+	IPS_SetVariableProfileText($profile, $prefix, $suffix);
+	IPS_SetVariableProfileDigits($profile, $digits);
+	IPS_SetVariableProfileIcon($profile, $icon);
+
+	IPS_SetVariableProfileAssociation($profile, 1, "Früh", "", -1);
+	IPS_SetVariableProfileAssociation($profile, 2, "Morgen", "", -1);
+	IPS_SetVariableProfileAssociation($profile, 3, "Tag", "", -1);
+	IPS_SetVariableProfileAssociation($profile, 4, "Dämmerung", "", -1);
+	IPS_SetVariableProfileAssociation($profile, 5, "Abend", "", -1);
+	IPS_SetVariableProfileAssociation($profile, 6, "Dämmerung", "", -1);
 }
 
 protected function CreateEventTrigger($triggerID, $name){
