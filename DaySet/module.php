@@ -49,13 +49,11 @@ protected function CreateVariable($type, $name, $ident, $parent, $position, $ini
 	if(!empty($profile)){
 		IPS_SetVariableCustomProfile($vid,$profile);    	// Set custom profile on Variable
 	}
-	// if(!empty($action)){
-		// Set Script on Var
-		$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
-		IPS_SetVariableCustomAction($vid,$svid);
-	// }
 
+	$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
+	IPS_SetVariableCustomAction($vid,$svid);
 
+	 AC_SetLoggingStatus($this->InstanceID, $vid, true); 	// Activate Logging
 
 	return $vid;                                        // Return Variable
 }
