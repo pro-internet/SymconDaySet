@@ -337,6 +337,7 @@ echo $daysetNamen[$dayset];
             $vid = $this->CreateEventTrigger($svs, $AbendID, "Abend");
             $vid = $this->CreateEventTrigger($svs, $DaemmerungID, "Daemmerung");
 						$vid = $this->CreateEventTrigger($svs, $daemmerungsVar, "DaemmerungsSeonsor");
+						$vid = $this->CreateEventTrigger($svs, $DaySetID, "DaySetTrigger");
             // Trigger on Time
             // Script, Name, Stunden, Minuten
             $vid = $this ->CreateTimeTrigger($svs, "Tag", 7, 50);
