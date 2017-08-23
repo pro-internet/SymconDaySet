@@ -35,6 +35,20 @@ public function ApplyChanges()
 
 }
 
+protected function GetModulAC(){
+
+	$moduleList = IPS_GetModuleList();
+	$dummyGUID = ""; //init
+	foreach($moduleList as $l)
+	{
+		if(IPS_GetModule($l)['ModuleName'] == "Archive Control")
+		{
+			$dummyGUID = $l;
+			break;
+		}
+	}
+}
+
 // to Create our Variables
 protected function CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide){
 	$vid = IPS_CreateVariable($type);
@@ -53,7 +67,10 @@ protected function CreateVariable($type, $name, $ident, $parent, $position, $ini
 	$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
 	IPS_SetVariableCustomAction($vid,$svid);
 
-	 AC_SetLoggingStatus($this->InstanceID, $vid, true); 	// Activate Logging
+	$archive = $this->GetModulAC();											// Startet die Get Archive Handler Funktion
+
+	AC_SetLoggingStatus($archive, $vid, true);
+	IPS_ApplyChanges($archive); 												// Activate Logging
 
 	return $vid;                                        // Return Variable
 }
