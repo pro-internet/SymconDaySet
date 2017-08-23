@@ -114,7 +114,7 @@ protected function CreateDaySetProfile($profile, $type, $min, $max, $steps, $dig
 	IPS_SetVariableProfileAssociation($profile, 3, "Tag", "", -1);
 	IPS_SetVariableProfileAssociation($profile, 4, "Dämmerung", "", -1);
 	IPS_SetVariableProfileAssociation($profile, 5, "Abend", "", -1);
-	IPS_SetVariableProfileAssociation($profile, 6, "Dämmerung", "", -1);
+	IPS_SetVariableProfileAssociation($profile, 6, "Nacht", "", -1);
 }
 
 protected function CreateEventTrigger($svs, $triggerID, $name){
@@ -148,6 +148,25 @@ protected function CreateTimeTrigger($svs, $name, $stunden, $minuten){
 	// Set Name
 	IPS_SetName($eid, $name);
 	IPS_SetIdent($eid, $name);
+
+	// Set Script
+	IPS_SetEventScript($eid, "IPS_RunScript(".$svs.");");
+
+	IPS_SetEventActive($eid, true);
+
+	return $eid;
+}
+
+protected function CreateMinitTimer($svs, $name, $ident){
+	$InstanceID = $this->InstanceID;
+
+	$eid = IPS_CreateEvent(1);
+	IPS_SetParent($eid, $InstanceID);
+	IPS_SetEventCyclic($eid, 0 /* Keine Datumsüberprüfung */, 0, 0, 2, 2 /* Minütlich */ , 10 /* Alle 2 Minuten */);
+	IPS_SetEventCyclicTimeTo($eid, 0, 0, 0);
+
+	IPS_SetName($eid, $name);
+	IPS_SetIdent($eid, $ident);
 
 	// Set Script
 	IPS_SetEventScript($eid, "IPS_RunScript(".$svs.");");
@@ -287,15 +306,15 @@ echo $daysetNamen[$dayset];
 
 
 
-    // Create DaySet Script
-    if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
-        $sid = IPS_CreateScript(0 /* PHP Script */);
-        IPS_SetParent($sid, $this->InstanceID);
-        IPS_SetName($sid, "DaySet");
-        IPS_SetIdent($sid, "DaySetScript");
-        IPS_SetHidden($sid, true);
-        IPS_SetScriptContent($sid, $script);
-    }
+  // Create DaySet Script
+  if(@IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID) === false){
+      $sid = IPS_CreateScript(0 /* PHP Script */);
+      IPS_SetParent($sid, $this->InstanceID);
+      IPS_SetName($sid, "DaySet");
+      IPS_SetIdent($sid, "DaySetScript");
+      IPS_SetHidden($sid, false);
+      IPS_SetScriptContent($sid, $script);
+  }
 	else {
 		$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
 		IPS_DeleteScript($svs, true);
@@ -317,11 +336,14 @@ echo $daysetNamen[$dayset];
             $vid = $this->CreateEventTrigger($svs, $FruehID, "Frueh");
             $vid = $this->CreateEventTrigger($svs, $AbendID, "Abend");
             $vid = $this->CreateEventTrigger($svs, $DaemmerungID, "Daemmerung");
+						$vid = $this->CreateEventTrigger($svs, $daemmerungsVar, "DaemmerungsSeonsor");
             // Trigger on Time
             // Script, Name, Stunden, Minuten
             $vid = $this ->CreateTimeTrigger($svs, "Tag", 7, 50);
             $vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
             $vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
+
+						$vid = $this ->CreateMinitTimer($svs, "Alle 10 Minuten", "minit");
         }
 
 	}
