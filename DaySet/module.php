@@ -216,74 +216,78 @@ public function CreateModule($daemmerungsVar){
 		}
 
 		$script = '<?
-	echo IPS_GetName($_IPS["SELF"])." \n";
+echo IPS_GetName($_IPS["SELF"])." \n";
 
-	$dayset = 6;	// Nacht
+$dayset = 6;	// Nacht
 
-	$daysetNamen = array(
-		"1" => "Früh",
-		"2" => "Morgen",
-		"3" => "Tag",
-		"4" => "Dämmerung",
-		"5" => "Abend",
-		"6" => "Nacht"
-	);
+$daysetNamen = array(
+    "1" => "Früh",
+    "2" => "Morgen",
+    "3" => "Tag",
+    "4" => "Dämmerung",
+    "5" => "Abend",
+    "6" => "Nacht"
+);
 
-	$hour = date("H");
-	$minute = date("i");
+$hour = date("H");
+$minute = date("i");
 
-	$time = intval($hour.$minute);
+$time = intval($hour.$minute);
 
-	$nachtTime = IPS_GetEvent(57506 /*[Zentrale\DaySet\DaySet\Nacht]*/)["CyclicTimeFrom"];
-	$nacht = intval(($nachtTime["Hour"] < 10 ? "0" : "").$nachtTime["Hour"].($nachtTime["Minute"] < 10 ? "0" : "").$nachtTime["Minute"]);
+$nachtTimeID = IPS_GetEventIDByName("Nacht", '.$this->InstanceID.');
+$nachtTime = IPS_GetEvent($nachtTimeID)["CyclicTimeFrom"];
+$nacht = intval(($nachtTime["Hour"] < 10 ? "0" : "").$nachtTime["Hour"].($nachtTime["Minute"] < 10 ? "0" : "").$nachtTime["Minute"]);
 
-	$morgenTime = IPS_GetEvent(35721 /*[Zentrale\DaySet\DaySet\Morgen]*/)["CyclicTimeFrom"];
-	$morgen = intval(($morgenTime["Hour"] < 10 ? "0" : "").$morgenTime["Hour"].($morgenTime["Minute"] < 10 ? "0" : "").$morgenTime["Minute"]);
+$morgenTimeID = IPS_GetEventIDByName("Morgen", '.$this->InstanceID.');
+$morgenTime = IPS_GetEvent($morgenTimeID)["CyclicTimeFrom"];
+$morgen = intval(($morgenTime["Hour"] < 10 ? "0" : "").$morgenTime["Hour"].($morgenTime["Minute"] < 10 ? "0" : "").$morgenTime["Minute"]);
 
-	$tagTime = IPS_GetEvent(23800 /*[Zentrale\DaySet\DaySet\Tag]*/)["CyclicTimeFrom"];
-	$tag = intval(($tagTime["Hour"] < 10 ? "0" : "").$tagTime["Hour"].($tagTime["Minute"] < 10 ? "0" : "").$tagTime["Minute"]);
+$tagTimeID = IPS_GetEventIDByName("Tag", '.$this->InstanceID.');
+$tagTime = IPS_GetEvent($tagTimeID)["CyclicTimeFrom"];
+$tag = intval(($tagTime["Hour"] < 10 ? "0" : "").$tagTime["Hour"].($tagTime["Minute"] < 10 ? "0" : "").$tagTime["Minute"]);
 
-	$lux = GetValue('.$dammValue.');
-	$luxFrueh = GetValue('.$FruehID.');
-	$luxDaemmerung = GetValue('.$DaemmerungID.');
-	$luxAbend = GetValue('.$AbendID.');
+$lux = GetValue('.$dammValue.');
+$luxFrueh = GetValue('.$FruehID.');
+$luxDaemmerung = GetValue('.$DaemmerungID.');
+$luxAbend = GetValue('.$AbendID.');
 
-	if($time >= 0 && $time < $morgen) {
+if($time >= 0 && $time < $morgen) {
 
-	// Früh
-	if ($lux >= $luxFrueh) {
-		$dayset = 1;
-	}
+// Früh
+if ($lux >= $luxFrueh) {
+    $dayset = 1;
+}
 
-	} else if ($time >= $morgen && $time < $tag) {
-	// Morgen
-	$dayset = 2;
-	} else if ($time >= $tag) {
+} else if ($time >= $morgen && $time < $tag) {
+// Morgen
+$dayset = 2;
+} else if ($time >= $tag) {
 
-	// Tag
-	$dayset = 3;
+// Tag
+$dayset = 3;
 
-	// Dämmerung
-	if ($lux <= $luxDaemmerung && $hour > 12) {
-		$dayset = 4;
-		// Abend
-		if ($lux <= $luxAbend) {
-			$dayset = 5;
-		}
+// Dämmerung
+if ($lux <= $luxDaemmerung && $hour > 12) {
+    $dayset = 4;
+    // Abend
+    if ($lux <= $luxAbend) {
+        $dayset = 5;
+    }
 
-	}
+}
 
-	// Nacht
-	if($time >= $nacht) {
-		$dayset = 6;
-	}
+// Nacht
+if($time >= $nacht) {
+    $dayset = 6;
+}
 
-	}
+}
 
-	SetValue(59623 /*[Zentrale\DaySet\DaySet\DaySet]*/, $dayset);
-	#echo $dayset." ";
-	echo $daysetNamen[$dayset];
+SetValue(59623 /*[Zentrale\DaySet\DaySet\DaySet]*/, $dayset);
+#echo $dayset." ";
+echo $daysetNamen[$dayset];
 	?>';
+
 
 
 		// Create DaySet Script
@@ -310,21 +314,18 @@ public function CreateModule($daemmerungsVar){
 		$svs = IPS_GetObjectIDByIdent("DaySetScript", $this->InstanceID);
 
 
-		// Trigger on Change
-		$FruehTrigger = @IPS_GetVariableIDByName("Tag", $parent);
-		if (!IPS_VariableExists($DaySetID)){
-			$vid = $this->CreateEventTrigger($FruehID, "Frueh");
-			$vid = $this->CreateEventTrigger($AbendID, "Abend");
-			$vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
-			// Trigger on Time
-			// Script, Name, Stunden, Minuten
-			$vid = $this ->CreateTimeTrigger($svs, "Tag", 7, 50);
-			$vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
-			$vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
-		}
-
-
-
+        // Trigger on Change
+        $FruehTrigger = @IPS_GetVariableIDByName("Tag", $parent);
+        if (!IPS_VariableExists($DaySetID)){
+            $vid = $this->CreateEventTrigger($FruehID, "Frueh");
+            $vid = $this->CreateEventTrigger($AbendID, "Abend");
+            $vid = $this->CreateEventTrigger($DaemmerungID, "Daemmerung");
+            // Trigger on Time
+            // Script, Name, Stunden, Minuten
+            $vid = $this ->CreateTimeTrigger($svs, "Tag", 7, 50);
+            $vid = $this ->CreateTimeTrigger($svs, "Morgen", 7, 0);
+            $vid = $this ->CreateTimeTrigger($svs, "Nacht", 23, 0);
+        }
 
 	}
 	print_r("Bitte Schließen");
