@@ -128,7 +128,7 @@ public function callScript(){
 }
 
 
-public function CreateModule($dammValue){
+public function CreateModule($id, $dammValue){
 
 	$parent = $this->InstanceID;
 	$DaemmerungsVar = "Test";
