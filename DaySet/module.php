@@ -157,11 +157,6 @@ protected function CreateTimeTrigger($svs, $name, $stunden, $minuten){
 	return $eid;
 }
 
-//public function callScript(){
-//	IPS_RunScript($svs);
-//}
-
-
 public function CreateModule($daemmerungsVar){
 
 	$parent = $this->InstanceID;
