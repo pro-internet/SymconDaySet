@@ -12,6 +12,8 @@ class DaySet extends IPSModule
 			$this->RegisterPropertyString("DaySet","");
 		}
 
+        $this->RegisterPropertyInteger("daemmerungsVar", 0);
+
 		// to get our parent
 		$parent = $this->InstanceID;
 
@@ -33,17 +35,25 @@ public function ApplyChanges()
 
 	$parent = $this->InstanceID;
 
+    $daemmerungsVar = $this->ReadPropertyInteger("daemmerungsVar");
+
+    if($daemmerungsVar != 0){
+        $this->CreateModule($daemmerungsVar);
+    }
+
+
+
 }
 
 protected function GetModulAC(){
 
 	$moduleList = IPS_GetModuleList();
-	$dummyGUID = ""; //init
+    $archive = ""; //init
 	foreach($moduleList as $l)
 	{
 		if(IPS_GetModule($l)['ModuleName'] == "Archive Control")
 		{
-			$dummyGUID = $l;
+            $archive = $l;
 			break;
 		}
 	}
@@ -53,26 +63,35 @@ protected function GetModulAC(){
 protected function CreateVariable($type, $name, $ident, $parent, $position, $initVal, $profile, $action, $hide){
 	$vid = IPS_CreateVariable($type);
 
-	IPS_SetName($vid,$name);                            // set Name
-	IPS_SetParent($vid,$parent);                        // Parent
-	IPS_SetIdent($vid,$ident);                          // ident halt :D
-	IPS_SetPosition($vid,$position);                    // List Position
-	SetValue($vid,$initVal);                            // init value
-	IPS_SetHidden($vid, $hide);                         // Objekt verstecken
+	IPS_SetName($vid,$name);                                                // set Name
+	IPS_SetParent($vid,$parent);                                            // Parent
+	IPS_SetIdent($vid,$ident);                                              // ident halt :D
+	IPS_SetPosition($vid,$position);                                        // List Position
+	SetValue($vid,$initVal);                                                // init value
+	IPS_SetHidden($vid, $hide);                                             // Objekt verstecken
 
 	if(!empty($profile)){
-		IPS_SetVariableCustomProfile($vid,$profile);    	// Set custom profile on Variable
+		IPS_SetVariableCustomProfile($vid,$profile);    	                // Set custom profile on Variable
 	}
 
 	$svid = IPS_GetObjectIDByIdent("SetValueScript", $this->InstanceID);
 	IPS_SetVariableCustomAction($vid,$svid);
-
-	$archive = $this->GetModulAC();											// Startet die Get Archive Handler Funktion
+    /*
+    $moduleList = IPS_GetModuleList();
+    $archive = ""; //init
+    foreach($moduleList as $l)
+    {
+        if(IPS_GetModule($l)['ModuleName'] == "Archive Control")
+        {
+            $archive = $l;
+            break;
+        }
+    }										// Startet die Get Archive Handler Funktion
 
 	AC_SetLoggingStatus($archive, $vid, true);
-	IPS_ApplyChanges($archive); 												// Activate Logging
+    IPS_ApplyChanges($archive); 											// Activate Logging */
 
-	return $vid;                                        // Return Variable
+	return $vid;                                                            // Return Variable
 }
 
 protected function CreateProfile($profile, $type, $min, $max, $steps, $digits = 0, $prefix = "DMX", $suffix, $icon){
@@ -143,7 +162,7 @@ public function callScript(){
 }
 
 
-public function CreateModule($id, $daemmerungsVar){
+public function CreateModule($daemmerungsVar){
 
 	$parent = $this->InstanceID;
 	$dammValue = "Test";

@@ -1,7 +1,6 @@
 {
-	"actions":
+	"elements":
 	[
-    { "type": "SelectVariable", "name": "DaemmerungsVar", "caption": "Dämmerungs Variable" },
-		{ "type": "Button", "label": "Submit", "onClick": "DS_CreateModule($id, $daemmerungsVar);" }
+		{ "type": "SelectVariable", "name": "daemmerungsVar", "caption": "Input Sensor" }
 	]
 }
