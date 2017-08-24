@@ -332,7 +332,7 @@ echo $daysetNamen[$dayset];
 
 
         // Trigger on Change
-				$tagTriggerID = @IPS_GetEventIDByName("Tag", $this->InstanceID
+				$tagTriggerID = @IPS_GetEventIDByName("Tag", $this->InstanceID);
 				$creatCheck = IPS_EventExists($tagTriggerID);
 
         if ($creatCheck == false){
