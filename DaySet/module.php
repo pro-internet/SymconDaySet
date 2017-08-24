@@ -332,8 +332,9 @@ echo $daysetNamen[$dayset];
 
 
         // Trigger on Change
-        $FruehTrigger = @IPS_GetVariableIDByName("Tag", $parent);
-        if (IPS_VariableExists($DaySetID)){
+				$tagTriggerID = @IPS_GetEventIDByName("Tag", $this->InstanceID
+
+        if (IPS_EventExists($tagTriggerID) == false){
             $vid = $this->CreateEventTrigger($svs, $FruehID, "Frueh");
             $vid = $this->CreateEventTrigger($svs, $AbendID, "Abend");
             $vid = $this->CreateEventTrigger($svs, $DaemmerungID, "Daemmerung");
